@@ -1,0 +1,399 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    padding: 40px;
+    max-width: 600px;
+    width: 100%;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    gap: 20px;
+}
+
+h1 {
+    color: #2c3e50;
+    font-size: 2.5em;
+    letter-spacing: 2px;
+    margin: 0;
+    flex: 1;
+    text-align: center;
+}
+
+.timer {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #e74c3c;
+    background: #fadbd8;
+    padding: 10px 20px;
+    border-radius: 8px;
+    min-width: 100px;
+    text-align: center;
+    font-family: 'Courier New', monospace;
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+
+.reset-button {
+    background: #95a5a6;
+    color: white;
+}
+
+.reset-button:hover {
+    background: #7f8c8d;
+    transform: translateY(-2px);
+}
+
+/* Game Board */
+.game-board {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.sudoku-grid {
+    display: grid;
+    grid-template-columns: repeat(9, 1fr);
+    gap: 0;
+    border: 3px solid #2c3e50;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.cell {
+    width: 60px;
+    height: 60px;
+    border: 1px solid #bdc3c7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    background: white;
+    transition: all 0.2s ease;
+}
+
+/* Box borders (3x3 quadrants) */
+.cell:nth-child(3n) {
+    border-right: 3px solid #2c3e50;
+}
+
+.cell:nth-child(n + 19):nth-child(-n + 27),
+.cell:nth-child(n + 46):nth-child(-n + 54) {
+    border-bottom: 3px solid #2c3e50;
+}
+
+/* Remove right border from rightmost boxes */
+.cell:nth-child(9n) {
+    border-right: 3px solid #2c3e50;
+}
+
+/* Hover state */
+.cell:hover {
+    background: #ecf0f1;
+}
+
+/* Selected cell */
+.cell.selected {
+    background: #3498db;
+    color: white;
+}
+
+.cell.selected .value,
+.cell.selected .annotations {
+    color: white;
+}
+
+/* Related cells (same row, column, or box) highlight */
+.cell.related {
+    background: #d5e8f7;
+}
+
+.cell.related.selected {
+    background: #3498db;
+}
+
+/* System prefilled values */
+.cell .value {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2c3e50;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* User entered values */
+.cell.user-entered .value {
+    color: #3498db;
+    font-weight: 600;
+}
+
+.cell.selected.user-entered .value {
+    color: white;
+}
+
+/* Invalid entry */
+.cell.invalid-entry .value {
+    color: #e74c3c;
+    font-weight: 700;
+}
+
+.cell.invalid-entry {
+    background: #fadbd8;
+}
+
+.cell.invalid-entry.selected {
+    background: #e74c3c;
+}
+
+.cell.invalid-entry.selected .value {
+    color: white;
+}
+
+/* Annotations container */
+.annotations {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 0;
+    padding: 2px;
+}
+
+.annotation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    color: #e67e22;
+    font-weight: 500;
+}
+
+.cell.selected .annotation {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Empty cell state */
+.cell:empty {
+    color: #95a5a6;
+}
+
+/* Info panel */
+.info-panel {
+    background: #ecf0f1;
+    padding: 15px;
+    border-radius: 6px;
+    text-align: center;
+    color: #2c3e50;
+    font-size: 14px;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+    }
+
+    .header {
+        flex-direction: column;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+        margin: 0;
+    }
+
+    .timer {
+        font-size: 1.4em;
+        min-width: 80px;
+    }
+
+    .cell {
+        width: 50px;
+        height: 50px;
+    }
+
+    .cell .value {
+        font-size: 18px;
+    }
+
+    .annotation {
+        font-size: 8px;
+    }
+
+    .controls {
+        gap: 8px;
+    }
+
+    button {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
+    .modal-content {
+        padding: 30px 20px;
+    }
+
+    .modal-content h2 {
+        font-size: 1.8em;
+    }
+
+    .time-display {
+        font-size: 1.4em;
+    }
+
+    .new-game-button {
+        padding: 12px 30px;
+        font-size: 1em;
+    }
+}
+
+/* Animation for invalid moves */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+.cell.invalid {
+    animation: shake 0.3s ease;
+}
+
+/* Success Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.modal-content {
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease;
+    max-width: 500px;
+    width: 90%;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-content h2 {
+    color: #27ae60;
+    font-size: 2.5em;
+    margin: 0 0 20px 0;
+}
+
+.completion-message {
+    color: #2c3e50;
+    font-size: 1.2em;
+    margin: 0 0 20px 0;
+}
+
+.time-display {
+    color: #e74c3c;
+    font-size: 1.8em;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+    margin: 20px 0 30px 0;
+    background: #fadbd8;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.new-game-button {
+    background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+    color: white;
+    padding: 15px 40px;
+    font-size: 1.1em;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.new-game-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(39, 174, 96, 0.4);
+}
+
+.new-game-button:active {
+    transform: translateY(0);
+}
